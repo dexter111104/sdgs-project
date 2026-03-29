@@ -1,0 +1,182 @@
+/* --- 1. 基礎頁面背景與字體 --- */
+body {
+    background-color: #050505; 
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- 2. 主容器 --- */
+.dashboard {
+    width: 90%;
+    max-width: 1000px;
+    padding: 30px;
+    background: #111;
+    border-radius: 20px;
+    border: 1px solid #333;
+    text-align: center;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+}
+
+/* --- 3. 核心：地圖疊加區域 (這是圖片消失或分開的關鍵) --- */
+.map-container {
+    position: relative;    /* 必須是 relative，子元素才能定位 */
+    width: 100%;
+    aspect-ratio: 16 / 9;  /* 固定比例，防止容器塌陷 */
+    background-color: #000;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #444;
+}
+
+/* 所有圖片層的強制重疊設定 */
+.map-layer {
+    position: absolute;    /* 強制所有圖片回到左上角 (0,0) 重疊 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;     /* 確保三張圖縮放比例完全一致 */
+    transition: opacity 0.2s ease;
+    pointer-events: none;  /* 讓滑鼠穿透圖片，才點得到下方的滑桿 */
+}
+
+/* 定義三張圖的疊放順序 (z-index) */
+.base { 
+    z-index: 1; 
+    opacity: 1; 
+    position: relative;    /* 只有底圖用 relative 來撐開容器高度 */
+}
+
+.heatmap { 
+    z-index: 2; 
+    opacity: 0; 
+    mix-blend-mode: screen; /* 混合模式：濾掉黑色背景，只留發光色 */
+}
+
+.lights { 
+    z-index: 3; 
+    opacity: 0; 
+    mix-blend-mode: screen; /* 混合模式：濾掉黑色背景，只留金色燈光 */
+}
+
+/* --- 4. 數據與控制台 --- */
+.controls {
+    position: relative;    /* 確保控制台在最上層，可以被點擊 */
+    z-index: 10;
+    margin-top: 20px;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+}
+
+.data-panel {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.data-item { color: #888; font-size: 0.9rem; }
+.data-item span { 
+    display: block; 
+    font-size: 1.2rem; 
+    color: #00FF41; 
+    font-weight: bold; 
+}
+
+/* --- 5. 滑桿樣式修正 (消除黃色底線) --- */
+input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+    margin: 15px 0;
+    /* 消除預設樣式並增加標準屬性以移除編輯器底線 */
+    -webkit-appearance: none;
+    appearance: none; 
+    background: #333;
+    height: 8px;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* 滑桿控制鈕 */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #00FF41;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+}
+
+.labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #555;
+}
+
+/* 新增：能源結構圖層設定 */
+.energy-mix {
+    z-index: 4; /* 疊在最上方 */
+    opacity: 0;
+    mix-blend-mode: screen; /* 關鍵：濾掉黑色背景 */
+    transition: opacity 0.4s ease; /* 讓切換過程有淡入淡出感 */
+}
+
+/* 新增：切換開關樣式 */
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    color: #00FF41; /* 使用你的主題綠色 */
+    letter-spacing: 1px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider-round {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #333;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider-round:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider-round {
+    background-color: #00FF41;
+}
+
+input:checked + .slider-round:before {
+    transform: translateX(26px);
+}
