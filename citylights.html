@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>不夜城的代價 - 光害與能源儀表板</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h1>不夜城的代價: 光害與能源消耗</h1>
+        <p>調整滑桿，觀察城市過度照明對夜空及能源的影響</p>
+
+        <div class="map-container">
+            <img src="map-base.png" class="map-layer base" alt="Night Sky">
+            
+            <img src="map-heatmap.png" id="heatmapLayer" class="map-layer heatmap" alt="Energy Heatmap">
+
+            <img src="map-lights.png" id="lightsLayer" class="map-layer lights" alt="City Lights">
+
+            <img src="map-energymix.png" id="energyMixLayer" class="map-layer energy-mix" alt="Energy Mix">
+        </div>
+
+        <div class="controls">
+            <div class="data-panel">
+                <div class="data-item">城市照明度: <span id="lightPcnt">0%</span></div>
+                <div class="data-item">能源消耗: <span id="energyVal">低 (節能)</span></div>
+                <div class="data-item">星空能見度: <span id="starVis">極佳</span></div>
+            </div>
+
+            <input type="range" id="lightSlider" min="0" max="100" value="0" step="1">
+
+            <div class="labels">
+                <span>暗夜 (0%)</span>
+                <span>不夜城 (100%)</span>
+            </div>
+
+            <div class="toggle-wrapper">
+                <span class="toggle-label">顯示全球能源結構圖</span>
+                <label class="switch">
+                    <input type="checkbox" id="energyMixToggle">
+                    <span class="slider-round"></span>
+                </label>
+            </div>
+
+            <div class="pro-stats-grid">
+                <div class="stat-card">
+                    <div class="text-wrapper">
+                        <span class="stat-label">預估碳排放量</span>
+                        <div class="stat-value"><span id="co2-value">120</span> <small>kg/hr</small></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-wrapper">
+                        <span class="stat-label">波特爾星空等級(Bortle Scale)</span>
+                        <div class="stat-value" id="bortle-scale">Class 1</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="eco-impact-section">
+                <h3>生態衝擊追蹤 (SDG 15)</h3>
+                <div class="eco-tags">
+                    <button class="eco-btn" onclick="showEcoDetail('birds')">候鳥遷徙</button>
+                    <button class="eco-btn" onclick="showEcoDetail('insects')">昆蟲生態</button>
+                    <button class="eco-btn" onclick="showEcoDetail('human')">人類健康</button>
+                </div>
+                <div id="eco-detail-box" class="eco-detail-box show" style="color: #666">
+                    點擊上方按鈕了解光害影響...
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <h2>邁向永續照明方案 (SDG 11)</h2>
+                <div class="solution-grid">
+                    <div class="sol-item">
+                        <h4>1. 定向遮光</h4>
+                        <p>使用屏蔽式燈具減少光線向上散逸。</p>
+                    </div>
+                </div>
+                <div class="sol-item">
+                    <h4>2. 暖色溫管理</h4>
+                    <p>採用 3000K 以下暖色光，減少有害藍光。</p>
+                </div>
+                <div class="sol-item">
+                    <h4>3. 智慧感測</h4>
+                    <p>離峰時段自動降壓調光，達成節能目標。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
